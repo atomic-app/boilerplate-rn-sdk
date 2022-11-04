@@ -8,7 +8,6 @@ import React from 'react';
 
 import {
   SafeAreaView,
-  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
@@ -17,23 +16,31 @@ import {
 } from 'react-native';
 
 import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
+  Colors
 } from 'react-native/Libraries/NewAppScreen';
 
 import { Session as AtomicSession } from "@atomic.io/react-native-atomic-sdk";
 import { StreamContainer } from "@atomic.io/react-native-atomic-sdk";
 
-AtomicSession.initialise("***REMOVED***", "***REMOVED***");
-AtomicSession.setApiBaseUrl("***REMOVED***");
-AtomicSession.setSessionDelegate(async () => {
-  const token = "***REMOVED***"
-  return token
-})
-AtomicSession.enableDebugMode(3)
+const Credentials = {
+  containerId: "***REMOVED***",
+  apiHost: "***REMOVED***",
+  apiKey: "***REMOVED***",
+  environmentId: "***REMOVED***",
+
+  requestTokenStr: "***REMOVED***",
+}
+
+const InitialiseAtomic = () => {
+  AtomicSession.initialise(Credentials.environmentId, Credentials.apiKey);
+  AtomicSession.setApiBaseUrl(Credentials.apiHost);
+  AtomicSession.setSessionDelegate(async () => {
+    return Credentials.requestTokenStr
+  })
+  AtomicSession.enableDebugMode(3)
+}
+
+InitialiseAtomic()
 
 const Section = ({children, title}) => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -76,9 +83,8 @@ const App = () => {
       />
     <StreamContainer
   style={{width: '100%', height: '100%'}}
-  containerId={"***REMOVED***"}
-  configuration={{
-  }}
+  containerId={Credentials.containerId}
+  configuration={{}}
 />
     </SafeAreaView>
   );
