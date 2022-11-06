@@ -30,6 +30,16 @@ const App = () => {
         style={{ width: '100%', height: '100%' }}
         containerId={ATOMIC_STREAM_CONTAINER_ID}
         configuration={{}}
+        runtimeVariablesRequested={async cards => {
+          // Resolve your runtime variables here.
+          cards.forEach(card => {
+            card.runtimeVariables.set('dateShort', new Date().toDateString())
+            card.runtimeVariables.set('dateLong', new Date().toString())
+            card.runtimeVariables.set('testRuntime', "Variable set from device at run time")
+          })
+
+          return Promise.resolve(cards)
+        }}
         />
     </SafeAreaView>
   );
