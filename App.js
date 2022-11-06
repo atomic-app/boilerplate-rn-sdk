@@ -30,10 +30,10 @@ const App = () => {
   return (
     <SafeAreaView>
       <StreamContainer
-    style={{width: '100%', height: '100%'}}
-    containerId={Credentials.containerId}
-    configuration={{}}
-  />
+        style={{ width: '100%', height: '100%' }}
+        containerId={Credentials.containerId}
+        configuration={{}}
+      />
     </SafeAreaView>
   );
 };
