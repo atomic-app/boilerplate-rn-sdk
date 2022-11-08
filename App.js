@@ -28,60 +28,30 @@ AtomicSession.enableDebugMode(3)
 
 // PUSH NOTIFICATIONS
 PushNotification.configure({
-  // (optional) Called when Token is generated (iOS and Android)
+  // Called when Token is generated (iOS and Android)
   onRegister: function (token) {
     console.log("TOKEN:", token);
     try {
       console.log("Registering device for notifications")
       AtomicSession.registerDeviceForNotifications(token.token);
     } catch {
-      console.error("Problem registering device for notifications")
+      console.error("Problem with registering AtomicSession for notifications")
     }
   },
 
   // (required) Called when a remote is received or opened, or local notification is opened
   onNotification: function (notification) {
     console.log("NOTIFICATION:", notification);
-
-    // process the notification
-
     // (required) Called when a remote is received or opened, or local notification is opened
     notification.finish(PushNotificationIOS.FetchResult.NoData);
   },
 
-  // (optional) Called when Registered Action is pressed and invokeApp is false, if true onNotification will be called (Android)
-  onAction: function (notification) {
-    console.log("ACTION:", notification.action);
-    console.log("NOTIFICATION:", notification);
-
-    // process the action
-  },
-
-  // (optional) Called when the user fails to register for remote notifications. Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
+  // (optional) Called when the user fails to register for remote notifications.
+  // Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
   onRegistrationError: function(err) {
     console.error("Failed to register for remote notifications");
     console.error(err.message, err);
   },
-
-  // IOS ONLY (optional): default: all - Permissions to register.
-  permissions: {
-    alert: true,
-    badge: true,
-    sound: true,
-  },
-
-  // Should the initial notification be popped automatically
-  // default: true
-  popInitialNotification: true,
-
-  /**
-   * (optional) default: true
-   * - Specified if permissions (ios) and token (android and ios) will requested or not,
-   * - if not, you must call PushNotificationsHandler.requestPermissions() later
-   * - if you are not using remote notification or do not have Firebase installed, use this:
-   *     requestPermissions: Platform.OS === 'ios'
-   */
-  requestPermissions: true,
 });
 
 AtomicSession.registerStreamContainersForNotifications(
