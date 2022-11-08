@@ -6,7 +6,7 @@ import React from 'react';
 import { SafeAreaView } from 'react-native';
 import { Session as AtomicSession, StreamContainer } from "@atomic.io/react-native-atomic-sdk";
 import PushNotificationIOS from "@react-native-community/push-notification-ios";
-import PushNotification from "react-native-push-notification";
+import PushNotification, { Importance } from "react-native-push-notification";
 
 const ATOMIC_API_HOST = "***REMOVED***";
 const ATOMIC_API_KEY = "***REMOVED***";
@@ -26,13 +26,12 @@ AtomicSession.setApiBaseUrl(ATOMIC_API_HOST);
 AtomicSession.setSessionDelegate(onAuthTokenRequested)
 AtomicSession.enableDebugMode(3)
 
-// PUSH NOTIFICATIONS
+// Setup Push Notifications
 PushNotification.configure({
   // Called when Token is generated (iOS and Android)
   onRegister: function (token) {
     console.log("TOKEN:", token);
     try {
-      console.log("Registering device for notifications")
       AtomicSession.registerDeviceForNotifications(token.token);
     } catch {
       console.error("Problem with registering AtomicSession for notifications")
@@ -42,7 +41,25 @@ PushNotification.configure({
   // (required) Called when a remote is received or opened, or local notification is opened
   onNotification: function (notification) {
     console.log("NOTIFICATION:", notification);
+
+
     // (required) Called when a remote is received or opened, or local notification is opened
+    //
+
+    if (!notification.userInteraction) {
+      const newNotification = {
+        foreground: notification.foreground,
+        userInteraction: false,
+        message: notification.data.body,
+        title: notification.data.title,
+        channelId: 'atomic-notifications'
+      }
+
+      // console.warn(newNotification)
+
+      PushNotification.localNotification(newNotification);
+    }
+
     notification.finish(PushNotificationIOS.FetchResult.NoData);
   },
 
@@ -58,6 +75,29 @@ AtomicSession.registerStreamContainersForNotifications(
   [ATOMIC_STREAM_CONTAINER_ID],
   true
 );
+
+PushNotification.createChannel(
+    {
+      channelId: "atomic-notifications", // (required)
+      channelName: "Atomic", // (required)
+      channelDescription: "A channel to categorise your notifications", // (optional) default: undefined.
+      playSound: false, // (optional) default: true
+      soundName: "default", // (optional) See `soundName` parameter of `localNotification` function
+      importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
+      vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
+    },
+    (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
+  );
+
+const notifObject = {
+    foreground: false, // BOOLEAN: If the notification was received in foreground or not
+    userInteraction: false, // BOOLEAN: If the notification was opened by the user from the notification area or not
+    message: 'My Notification Message', // STRING: The notification message
+    data: {}, // OBJECT: The push data or the defined userInfo in local notifications
+    channelId: 'atomic-notifications'
+}
+
+PushNotification.localNotification(notifObject)
 
 const App = () => {
   return (
