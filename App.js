@@ -31,7 +31,12 @@ PushNotification.configure({
   // (optional) Called when Token is generated (iOS and Android)
   onRegister: function (token) {
     console.log("TOKEN:", token);
-    AtomicSession.registerDeviceForNotifications(token.token);
+    try {
+      console.log("Registering device for notifications")
+      AtomicSession.registerDeviceForNotifications(token.token);
+    } catch {
+      console.error("Problem registering device for notifications")
+    }
   },
 
   // (required) Called when a remote is received or opened, or local notification is opened
@@ -78,15 +83,6 @@ PushNotification.configure({
    */
   requestPermissions: true,
 });
-
-const notifObject = {
-    foreground: false, // BOOLEAN: If the notification was received in foreground or not
-    userInteraction: false, // BOOLEAN: If the notification was opened by the user from the notification area or not
-    message: 'My Notification Message', // STRING: The notification message
-    data: {}, // OBJECT: The push data or the defined userInfo in local notifications
-};
-
-PushNotification.localNotification(notifObject);
 
 AtomicSession.registerStreamContainersForNotifications(
   [ATOMIC_STREAM_CONTAINER_ID],
