@@ -73,13 +73,11 @@ AtomicSession.registerStreamContainersForNotifications(
 
 // Required for Android Push notifications
 PushNotification.createChannel(
-    {
-      channelId: "atomic-notifications", // (required)
-      channelName: "Atomic", // (required)
-    }
-  // ,
-  //   (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
-  );
+  {
+    channelId: "atomic-notifications", // (required)
+    channelName: "Atomic", // (required)
+  }
+);
 
 const App = () => {
   return (
