@@ -8,11 +8,11 @@ import { Session as AtomicSession, StreamContainer } from "@atomic.io/react-nati
 import PushNotificationIOS from "@react-native-community/push-notification-ios";
 import PushNotification from "react-native-push-notification";
 
-const ATOMIC_API_HOST = "***REMOVED***";
-const ATOMIC_API_KEY = "***REMOVED***";
-const ATOMIC_ENVIRONMENT_ID = "***REMOVED***";
-const ATOMIC_STREAM_CONTAINER_ID = "***REMOVED***";
-const ATOMIC_REQUEST_TOKEN_STRING = "***REMOVED***"
+const ATOMIC_API_HOST = '';
+const ATOMIC_API_KEY = '';
+const ATOMIC_ENVIRONMENT_ID = '';
+const ATOMIC_STREAM_CONTAINER_ID = '';
+const ATOMIC_REQUEST_TOKEN_STRING = '';
 
 const onAuthTokenRequested = async () => {
   // This function will called by the Atomic SDK to authenticate a user.
