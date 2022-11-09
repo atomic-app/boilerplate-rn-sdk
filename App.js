@@ -3,10 +3,10 @@
 */
 
 import React from 'react';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, Platform } from 'react-native';
 import { Session as AtomicSession, StreamContainer } from "@atomic.io/react-native-atomic-sdk";
 import PushNotificationIOS from "@react-native-community/push-notification-ios";
-import PushNotification, { Importance } from "react-native-push-notification";
+import PushNotification from "react-native-push-notification";
 
 const ATOMIC_API_HOST = "***REMOVED***";
 const ATOMIC_API_KEY = "***REMOVED***";
@@ -24,7 +24,6 @@ const onAuthTokenRequested = async () => {
 AtomicSession.initialise(ATOMIC_ENVIRONMENT_ID, ATOMIC_API_KEY);
 AtomicSession.setApiBaseUrl(ATOMIC_API_HOST);
 AtomicSession.setSessionDelegate(onAuthTokenRequested)
-AtomicSession.enableDebugMode(3)
 
 // Setup Push Notifications
 PushNotification.configure({
@@ -42,11 +41,10 @@ PushNotification.configure({
   onNotification: function (notification) {
     console.log("NOTIFICATION:", notification);
 
-
-    // (required) Called when a remote is received or opened, or local notification is opened
-    //
-
-    if (!notification.userInteraction) {
+    // On Android we have format the notification and then post it ourselves
+    // using the localNotification method when we receive a remote notification
+    // checking that it isn't a user interaction event to avoid an infinite loop.
+    if (Platform.OS === 'android' && !notification.userInteraction) {
       const newNotification = {
         foreground: notification.foreground,
         userInteraction: false,
@@ -54,9 +52,6 @@ PushNotification.configure({
         title: notification.data.title,
         channelId: 'atomic-notifications'
       }
-
-      // console.warn(newNotification)
-
       PushNotification.localNotification(newNotification);
     }
 
@@ -76,28 +71,15 @@ AtomicSession.registerStreamContainersForNotifications(
   true
 );
 
+// Required for Android Push notifications
 PushNotification.createChannel(
     {
       channelId: "atomic-notifications", // (required)
       channelName: "Atomic", // (required)
-      channelDescription: "A channel to categorise your notifications", // (optional) default: undefined.
-      playSound: false, // (optional) default: true
-      soundName: "default", // (optional) See `soundName` parameter of `localNotification` function
-      importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
-      vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
-    },
-    (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
+    }
+  // ,
+  //   (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
   );
-
-const notifObject = {
-    foreground: false, // BOOLEAN: If the notification was received in foreground or not
-    userInteraction: false, // BOOLEAN: If the notification was opened by the user from the notification area or not
-    message: 'My Notification Message', // STRING: The notification message
-    data: {}, // OBJECT: The push data or the defined userInfo in local notifications
-    channelId: 'atomic-notifications'
-}
-
-PushNotification.localNotification(notifObject)
 
 const App = () => {
   return (

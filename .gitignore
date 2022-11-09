@@ -62,3 +62,6 @@ buck-out/
 # Ruby / CocoaPods
 /ios/Pods/
 /vendor/bundle/
+
+# Ignoring google-services.json, you may want to commit this file
+android/app/google-services.json
