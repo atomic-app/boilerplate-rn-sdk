@@ -6,7 +6,28 @@ The code is based around the [Atomic.io documentation](https://documentation.ato
 The base React Native app is created following the [React Native documentation](https://reactnative.dev/docs/environment-setup) following the instructions for `React Native CLI Quickstart`. 
 Follow the instructions there for setting up the development environment and for running the app.
 
-The app won't work out of the box, you will need to add your own values to `App.js` in order to communicate with Atomic. 
+## Quick Start
+Install the dependencies and run the Metro bundler
+```
+npm install
+npx react-native start
+```
+In another terminal window, install the dependencies on iOS
+```
+cd ios
+pod install
+cd ..
+```
+And then run the iOS app
+```
+npx react-native run-ios
+```
+To run the Android app
+```
+npx react-native run-android
+```
+
+The app won't load cards of the box, you will need to add your own values to `App.js` in order to communicate with Atomic. 
 To find these values:
 
 - Open the [Atomic Workbench](https://workbench.atomic.io/), and navigate to the Configuration area.
