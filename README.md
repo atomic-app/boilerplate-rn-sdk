@@ -1,69 +1,32 @@
-# React Native Boilerplate App
+# README
 
-This is a boilerplate app to get you started with the Atomic SDK for React Native.
+## About
 
-The code is based around the [Atomic.io documentation](https://documentation.atomic.io/sdks/react-native) and designed to get you up and running as quickly as possible.
+This template can be used to quickly bootstrap a React Native app that integrates the [Atomic.io SDK](https://documentation.atomic.io/sdks/react-native). 
+It uses the React Native CLI and is based on the default react-native init [template](https://github.com/facebook/react-native/tree/main/template). 
 
-Follow the instructions for `React Native CLI Quickstart` in the [React Native documentation](https://reactnative.dev/docs/environment-setup) to set up your local development environment and run the app.
+## Getting Started
 
-## Quick Start
-
-Install the dependencies and run the Metro bundler
-
-```
-npm install
-npx react-native start
-```
-
-In another terminal window, install the dependencies on iOS
+To create a project using this template, in your terminal run the following command:
 
 ```
-cd ios
-pod install
-cd ..
+npx react-native init MyAtomicApp --template "atomic-app/boilerplate-rn-sdk" --npm
 ```
 
-And then run the iOS app
+To include setup for push notifications, append #push-notification-support to the argument given to the `--template` flag. For example:
 
 ```
-npx react-native run-ios
+npx react-native init MyAtomicApp --template "atomic-app/boilerplate-rn-sdk#push-notification-support" --npm
 ```
 
-To run the Android app
+To run the app and setup authentication. Refer to the README.md file in the generated project. 
+
+## Troubleshooting
+
+If you have issues bootstrapping this project, first make sure that you have followed the [environment setup](https://reactnative.dev/docs/environment-setup) for the React Native CLI, and then try calling the `init` command without the template argument. 
 
 ```
-npx react-native run-android
+npx react-native init MyAtomicApp --npm
 ```
 
-The app won't load cards out-of-the-box, you will need to add your own values to `App.js` in order to communicate with Atomic.
-To find these values:
-
-- Open the [Atomic Workbench](https://workbench.atomic.io/), and navigate to the Configuration area.
-- Under the 'SDK' header, your API host is in the 'API Host' section, your API key is in the 'API Keys' section
-- Your environment ID is at the top of the page under 'Environment ID'.
-
-You will also need a JWT token for authentication.
-See the [authentication documentation](https://documentation.atomic.io/sdks/auth-SDK) for instructions on generating this.
-
-## Runtime Variables
-
-For an example of how to set runtime variables in your code, checkout the `runtime-variables` branch.
-
-## Push Notifications
-
-An example of how to receive and create in app notifications can be found on the `push-notification-support` branch.
-
-Push notifications require a substantial amount of app and organization specific configuration.
-
-More detailed instructions for setting up [push notifications for Android](https://documentation.atomic.io/sdks/android#notifications) can be found in our Atomic documentation, but the main steps are:
-
-- Provide a `google-services.json` file in the `android/app/` directory.
-- Enable legacy Firebase Cloud Messaging in your Google Cloud Console and save your server key in the `Configuration -> SDK -> Notifications` section of your Atomic workbench.
-
-More detailed instructions for setting up [push notifications for iOS](https://documentation.atomic.io/sdks/ios#push-notifications) can be found our Atomic documentation, but the main steps are:
-
-- Open the `ios/*.xcworkspace` file to open the iOS project in Xcode
-- Modify the bundle-id to be unique
-- Set the signing configuration to use your own Apple developer account
-- Create an Apple Push Notification certificate for the app
-- Export the certificate and add it to your Atomic workbench under Notifications.
+If the base template succeeds, but the Atomic template fails. Get in touch with [support@atomic.io](mailto:support@atomic.io) or file an issue in this repository. 
