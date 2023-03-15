@@ -10,13 +10,13 @@ It uses the React Native CLI and is based on the default react-native init [temp
 To create a project using this template, in your terminal run the following command:
 
 ```
-npx react-native init MyAtomicApp --template atomic-app/boilerplate-rn-sdk --npm
+npx react-native init MyAtomicApp --template "atomic-app/boilerplate-rn-sdk" --npm
 ```
 
 To include setup for push notifications, append #push-notification-support to the argument given to the `--template` flag. For example:
 
 ```
-npx react-native init MyAtomicApp --template atomic-app/boilerplate-rn-sdk#push-notification-support --npm
+npx react-native init MyAtomicApp --template "atomic-app/boilerplate-rn-sdk#push-notification-support" --npm
 ```
 
 To run the app and setup authentication. Refer to the README.md file in the generated project. 
