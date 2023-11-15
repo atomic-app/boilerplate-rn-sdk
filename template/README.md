@@ -12,10 +12,10 @@ Install the dependencies and run the Metro bundler
 
 ```
 npm install
-npx react-native start
+npm start
 ```
 
-In another terminal window, install the dependencies on iOS
+Let Metro Bundler run in its _own_ terminal. In another terminal window, install the dependencies on iOS
 
 ```
 cd ios
@@ -26,13 +26,13 @@ cd ..
 And then run the iOS app
 
 ```
-npx react-native run-ios
+npm run ios
 ```
 
 To run the Android app
 
 ```
-npx react-native run-android
+npm run android
 ```
 
 The app won't load cards out-of-the-box, you will need to add your own values to `App.tsx` in order to communicate with Atomic.
