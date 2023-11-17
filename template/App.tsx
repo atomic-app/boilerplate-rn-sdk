@@ -2,17 +2,23 @@
  * Boilerplate React Native App For Atomic SDK
  */
 
-import React from 'react';
-import {SafeAreaView} from 'react-native';
-import {
-  Session as AtomicSession,
-  StreamContainer,
-} from '@atomic.io/react-native-atomic-sdk';
+import * as React from 'react';
 
+import {Session as AtomicSession} from '@atomic.io/react-native-atomic-sdk';
+import {NavigationContainer} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createStackNavigator} from '@react-navigation/stack';
+
+import HomeScreen from './screens/Home';
+import SportsScreen from './screens/Sports';
+import WorldScreen from './screens/World';
+import NotificationModal from './screens/modals/NotificationModal';
+import EmergencyModal from './screens/modals/EmergencyModal';
+
+// Configure the Atomic SDK
 const ATOMIC_API_HOST = '';
-const ATOMIC_API_KEY = '';
 const ATOMIC_ENVIRONMENT_ID = '';
-const ATOMIC_STREAM_CONTAINER_ID = '';
+const ATOMIC_API_KEY = '';
 const ATOMIC_REQUEST_TOKEN_STRING = '';
 
 const onAuthTokenRequested = async () => {
@@ -22,20 +28,47 @@ const onAuthTokenRequested = async () => {
   return ATOMIC_REQUEST_TOKEN_STRING;
 };
 
-AtomicSession.initialise(ATOMIC_ENVIRONMENT_ID, ATOMIC_API_KEY);
 AtomicSession.setApiBaseUrl(ATOMIC_API_HOST);
+AtomicSession.initialise(ATOMIC_ENVIRONMENT_ID, ATOMIC_API_KEY);
 AtomicSession.setSessionDelegate(onAuthTokenRequested);
 
-const App = () => {
+const Tab = createBottomTabNavigator();
+const RootStack = createStackNavigator();
+
+const MainTabNavigator = () => {
   return (
-    <SafeAreaView>
-      <StreamContainer
-        style={{width: '100%', height: '100%'}}
-        containerId={ATOMIC_STREAM_CONTAINER_ID}
-        configuration={{}}
-      />
-    </SafeAreaView>
+    <Tab.Navigator screenOptions={{headerShown: false}}>
+      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Sports" component={SportsScreen} />
+      <Tab.Screen name="World" component={WorldScreen} />
+    </Tab.Navigator>
   );
 };
 
-export default App;
+export default function App() {
+  return (
+      <NavigationContainer>
+        <RootStack.Navigator
+          screenOptions={{
+            headerShown: false,
+            presentation: 'modal',
+            animationEnabled: false,
+          }}>
+          <RootStack.Screen
+            name="BottomTabNavigatorScreen"
+            component={MainTabNavigator}
+          />
+          <RootStack.Screen
+            name="NotificationModal"
+            component={NotificationModal}
+            options={{animationEnabled: true}}
+          />
+          <RootStack.Screen
+            name="EmergencyModal"
+            component={EmergencyModal}
+            options={{animationEnabled: true}}
+          />
+        </RootStack.Navigator>
+      </NavigationContainer>
+  );
+}
