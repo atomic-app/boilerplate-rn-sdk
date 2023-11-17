@@ -11,6 +11,10 @@ The app's theme revolves around a news application that integrates four Atomic s
 
 Further information for the Atomic SDK can be found in the [Atomic.io documentation](https://documentation.atomic.io/sdks/react-native).
 
+## Demo Video
+
+For a comprehensive demonstration and insights into key code snippets, watch the demo video [here](https://drive.google.com/file/d/1sLShQ2WKrzTLjeShamGwEJFzSJ5JL0DA/view?usp=sharing).
+
 ## Getting Started
 
 To get started, follow these steps:
