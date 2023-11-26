@@ -1,12 +1,59 @@
-# React Native Boilerplate App
+# React Native Multiple Containers Demo App
 
-This is a boilerplate app to get you started with the Atomic SDK for React Native.
+This demo app showcases the implementation of Atomic SDK with multiple containers within the same app. It utilises the popular [React Navigation](https://reactnavigation.org/docs/getting-started/) library.
 
-The code is based around the [Atomic.io documentation](https://documentation.atomic.io/sdks/react-native) and designed to get you up and running as quickly as possible.
+The app's theme revolves around a news application that integrates four Atomic stream containers:
+
+1. Sports News
+2. World News
+3. Notifications
+4. Emergency Stream
+
+Further information for the Atomic SDK can be found in the [Atomic.io documentation](https://documentation.atomic.io/sdks/react-native).
+
+## Demo Video
+
+For a comprehensive demonstration and insights into key code snippets, watch the demo video:
+
+[<img width="456" alt="Demo Video" src="https://github.com/sunnyysetia/boilerplate-rn-sdk/assets/89380644/e62b1959-5421-46bf-bb55-7ccde75996e2">](https://vimeo.com/888493462/76c593d971)
+
+
+## Getting Started
+
+To get started, follow these steps:
+
+### Configuration
+
+In `App.tsx`, configure the following four variables for the app to communicate effectively with Atomic:
+
+1. `ATOMIC_API_HOST` 
+- Obtain from Atomic Workbench -> Configuration -> SDK -> API host
+2. `ATOMIC_API_KEY` 
+- Obtain from Atomic Workbench -> Configuration -> SDK -> API keys
+3. `ATOMIC_ENVIRONMENT_ID` 
+- Obtain from Atomic Workbench -> Configuration -> Top of the page
+4. `ATOMIC_REQUEST_TOKEN_STRING` 
+- Generate a JWT token for user authentication. Refer to the [authentication documentation](https:/documentation.atomic.io/sdks/auth-SDK) for instructions.
+
+### Stream Containers
+
+Create and acquire the IDs for four stream containers by navigating to: Atomic Workbench -> Configuration -> Stream Containers
+
+Assign the container IDs in the respective files as follows:
+
+1. `ATOMIC_SPORTS_STREAM_CONTAINER_ID` 
+- Set in `Home.tsx` & `Sports.tsx`
+2. `ATOMIC_WORLD_STREAM_CONTAINER_ID` 
+- Set in `Home.tsx` & `World.tsx`
+3. `ATOMIC_NOTIFICATION_STREAM_CONTAINER_ID`
+- Set in `Home.tsx` & `NotificationModal.tsx`
+4. `ATOMIC_EMERGENCY_STREAM_CONTAINER_ID` 
+- Set in `Home.tsx` & `EmergencyModal.tsx`
+
+
+## Running the app
 
 Follow the instructions for `React Native CLI Quickstart` in the [React Native documentation](https://reactnative.dev/docs/environment-setup) to set up your local development environment and run the app.
-
-## Quick Start
 
 Install the dependencies and run the Metro bundler
 
@@ -34,16 +81,6 @@ To run the Android app
 ```
 npm run android
 ```
-
-The app won't load cards out-of-the-box, you will need to add your own values to `App.tsx` in order to communicate with Atomic.
-To find these values:
-
-- Open the [Atomic Workbench](https://workbench.atomic.io/), and navigate to the Configuration area.
-- Under the 'SDK' header, your API host is in the 'API Host' section, your API key is in the 'API Keys' section
-- Your environment ID is at the top of the page under 'Environment ID'.
-
-You will also need a JWT token for authentication.
-See the [authentication documentation](https://documentation.atomic.io/sdks/auth-SDK) for instructions on generating this.
 
 ## Runtime Variables
 
