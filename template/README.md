@@ -13,7 +13,10 @@ Further information for the Atomic SDK can be found in the [Atomic.io documentat
 
 ## Demo Video
 
-For a comprehensive demonstration and insights into key code snippets, watch the demo video [here](https://drive.google.com/file/d/1sLShQ2WKrzTLjeShamGwEJFzSJ5JL0DA/view?usp=sharing).
+For a comprehensive demonstration and insights into key code snippets, watch the demo video:
+
+[<img width="456" alt="Demo Video" src="https://github.com/sunnyysetia/boilerplate-rn-sdk/assets/89380644/e62b1959-5421-46bf-bb55-7ccde75996e2">](https://vimeo.com/888493462/76c593d971)
+
 
 ## Getting Started
 
