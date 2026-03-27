@@ -1,69 +1,97 @@
-# React Native Boilerplate App
+This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
-This is a boilerplate app to get you started with the Atomic SDK for React Native.
+# Getting Started
 
-The code is based around the [Atomic.io documentation](https://documentation.atomic.io/sdks/react-native) and designed to get you up and running as quickly as possible.
+> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
 
-Follow the instructions for `React Native CLI Quickstart` in the [React Native documentation](https://reactnative.dev/docs/environment-setup) to set up your local development environment and run the app.
+## Step 1: Start Metro
 
-## Quick Start
+First, you will need to run **Metro**, the JavaScript build tool for React Native.
 
-Install the dependencies and run the Metro bundler
+To start the Metro dev server, run the following command from the root of your React Native project:
 
-```
-npm install
+```sh
+# Using npm
 npm start
+
+# OR using Yarn
+yarn start
 ```
 
-Let Metro Bundler run in its _own_ terminal. In another terminal window, install the dependencies on iOS
+## Step 2: Build and run your app
 
-```
-cd ios
-pod install
-cd ..
-```
+With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
 
-And then run the iOS app
+### Android
 
-```
-npm run ios
-```
-
-To run the Android app
-
-```
+```sh
+# Using npm
 npm run android
+
+# OR using Yarn
+yarn android
 ```
 
-The app won't load cards out-of-the-box, you will need to add your own values to `App.tsx` in order to communicate with Atomic.
-To find these values:
+### iOS
 
-- Open the [Atomic Workbench](https://workbench.atomic.io/), and navigate to the Configuration area.
-- Under the 'SDK' header, your API host is in the 'API Host' section, your API key is in the 'API Keys' section
-- Your environment ID is at the top of the page under 'Environment ID'.
+For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
 
-You will also need a JWT token for authentication.
-See the [authentication documentation](https://documentation.atomic.io/sdks/auth-SDK) for instructions on generating this.
+The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
 
-## Runtime Variables
+```sh
+bundle install
+```
 
-For an example of how to set runtime variables in your code, checkout the `runtime-variables` branch.
+Then, and every time you update your native dependencies, run:
 
-## Push Notifications
+```sh
+bundle exec pod install
+```
 
-An example of how to receive and create in app notifications can be found on the `push-notification-support` branch.
+For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
 
-Push notifications require a substantial amount of app and organization specific configuration.
+```sh
+# Using npm
+npm run ios
 
-More detailed instructions for setting up [push notifications for Android](https://documentation.atomic.io/sdks/android#notifications) can be found in our Atomic documentation, but the main steps are:
+# OR using Yarn
+yarn ios
+```
 
-- Provide a `google-services.json` file in the `android/app/` directory.
-- Enable legacy Firebase Cloud Messaging in your Google Cloud Console and save your server key in the `Configuration -> SDK -> Notifications` section of your Atomic workbench.
+If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
 
-More detailed instructions for setting up [push notifications for iOS](https://documentation.atomic.io/sdks/ios#push-notifications) can be found our Atomic documentation, but the main steps are:
+This is one way to run your app — you can also build it directly from Android Studio or Xcode.
 
-- Open the `ios/*.xcworkspace` file to open the iOS project in Xcode
-- Modify the bundle-id to be unique
-- Set the signing configuration to use your own Apple developer account
-- Create an Apple Push Notification certificate for the app
-- Export the certificate and add it to your Atomic workbench under Notifications.
+## Step 3: Modify your app
+
+Now that you have successfully run the app, let's make changes!
+
+Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+
+When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+
+- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
+- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+
+## Congratulations! :tada:
+
+You've successfully run and modified your React Native App. :partying_face:
+
+### Now what?
+
+- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
+- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+
+# Troubleshooting
+
+If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+
+# Learn More
+
+To learn more about React Native, take a look at the following resources:
+
+- [React Native Website](https://reactnative.dev) - learn more about React Native.
+- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
+- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
+- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
+- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
