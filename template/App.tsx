@@ -3,14 +3,14 @@
  */
 
 import React from 'react';
-import {SafeAreaView, Platform} from 'react-native';
+import { SafeAreaView, Platform } from 'react-native';
 import {
   Session as AtomicSession,
   StreamContainer,
 } from '@atomic.io/react-native-atomic-sdk';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import PushNotification from 'react-native-push-notification';
-import {requestNotifications} from 'react-native-permissions';
+import { requestNotifications } from 'react-native-permissions';
 
 const ATOMIC_API_HOST = '';
 const ATOMIC_API_KEY = '';
@@ -19,7 +19,7 @@ const ATOMIC_STREAM_CONTAINER_ID = '';
 const ATOMIC_REQUEST_TOKEN_STRING = '';
 
 // Request permission for notification using 'react-native-permissions' library.
-requestNotifications(['alert', 'sound']).then(({status}) => {
+requestNotifications(['alert', 'sound']).then(({ status }) => {
   registerForNotificationsIfReadyAndRequired({
     permissionsGranted: status === 'granted',
   });
@@ -135,7 +135,7 @@ const App = () => {
   return (
     <SafeAreaView>
       <StreamContainer
-        style={{width: '100%', height: '100%'}}
+        style={{ width: '100%', height: '100%' }}
         containerId={ATOMIC_STREAM_CONTAINER_ID}
         configuration={{}}
       />
