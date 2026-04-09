@@ -15,8 +15,6 @@ linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
   Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
   use_frameworks! :linkage => linkage.to_sym
-else
-  use_frameworks! :linkage => :static
 end
 
 target 'BoilerplateRNSDK' do
@@ -28,6 +26,11 @@ target 'BoilerplateRNSDK' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
+  # @react-native-firebase requires these pods to define modules so that
+  # Firebase's Swift internals can import them as static libraries.
+  pod 'GoogleUtilities', :modular_headers => true
+  pod 'FirebaseCore', :modular_headers => true
+
   post_install do |installer|
     react_native_post_install(
       installer,
@@ -35,5 +38,13 @@ target 'BoilerplateRNSDK' do
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
+    # Firebase Obj-C pods include headers from the modular-headers-enabled
+    # GoogleUtilities using #include rather than @import, which Xcode treats as a
+    # module boundary violation. Suppress this error across all pod targets.
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |cfg|
+        cfg.build_settings['CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES'] = 'YES'
+      end
+    end
   end
 end

@@ -17,8 +17,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
   ) -> Bool {
     // Required for push notifications via Firebase. GoogleService-Info.plist must
-    // be added to the Xcode project before building.
-    FirebaseApp.configure()
+    // be added to the Xcode project before push notifications will work.
+    if Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist") != nil {
+      FirebaseApp.configure()
+    } else {
+      print("⚠️ GoogleService-Info.plist not found — Firebase not initialised. Push notifications will not work.")
+    }
 
     let delegate = ReactNativeDelegate()
     let factory = RCTReactNativeFactory(delegate: delegate)

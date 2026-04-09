@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { SafeAreaView } from 'react-native';
+import { Platform, SafeAreaView } from 'react-native';
 import {
   Session as AtomicSession,
   StreamContainer,
@@ -57,8 +57,17 @@ notifee.requestPermission().then(async settings => {
   registerForNotificationsIfReadyAndRequired({ permissionsGranted: granted });
 
   if (granted) {
-    const token = await messaging().getToken();
-    registerForNotificationsIfReadyAndRequired({ devicePushToken: token });
+    try {
+      // iOS requires explicit registration for remote messages before getToken().
+      // This will fail gracefully if GoogleService-Info.plist is not present.
+      if (Platform.OS === 'ios') {
+        await messaging().registerDeviceForRemoteMessages();
+      }
+      const token = await messaging().getToken();
+      registerForNotificationsIfReadyAndRequired({ devicePushToken: token });
+    } catch (e) {
+      console.warn('Failed to get FCM token — push notifications will not work.', e);
+    }
   }
 });
 
