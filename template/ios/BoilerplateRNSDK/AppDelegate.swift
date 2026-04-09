@@ -3,6 +3,7 @@ import React
 import React_RCTAppDelegate
 import ReactAppDependencyProvider
 import UserNotifications
+import FirebaseCore
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
@@ -15,6 +16,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
   ) -> Bool {
+    // Required for push notifications via Firebase. GoogleService-Info.plist must
+    // be added to the Xcode project before building.
+    FirebaseApp.configure()
+
     let delegate = ReactNativeDelegate()
     let factory = RCTReactNativeFactory(delegate: delegate)
     delegate.dependencyProvider = RCTAppDependencyProvider()
@@ -24,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     window = UIWindow(frame: UIScreen.main.bounds)
 
-    // Added for push notifications
+    // Required for foreground notification presentation via react-native-notify-kit.
     UNUserNotificationCenter.current().delegate = self
 
     factory.startReactNative(
@@ -36,30 +41,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     return true
   }
 
-  // Added for push notifications
-
-  func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-    RNCPushNotificationIOS.didRegisterForRemoteNotifications(withDeviceToken: deviceToken)
-  }
-
-  func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-    RNCPushNotificationIOS.didReceiveRemoteNotification(userInfo, fetchCompletionHandler: completionHandler)
-  }
-
-  func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-    RNCPushNotificationIOS.didFailToRegisterForRemoteNotificationsWithError(error)
-  }
-
-  func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-    RNCPushNotificationIOS.didReceive(response)
-    completionHandler()
-  }
-
+  // Present notifications when the app is in the foreground.
   func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-    completionHandler([.sound, .alert, .badge])
+    completionHandler([.sound, .badge, .banner])
   }
-
-  // End added for push notifications
 }
 
 class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {
