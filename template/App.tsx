@@ -9,7 +9,10 @@ import {
   StreamContainer,
 } from '@atomic.io/react-native-atomic-sdk';
 import messaging from '@react-native-firebase/messaging';
-import notifee, { AndroidImportance, AuthorizationStatus } from 'react-native-notify-kit';
+import notifee, {
+  AndroidImportance,
+  AuthorizationStatus,
+} from 'react-native-notify-kit';
 
 const ATOMIC_API_HOST = '';
 const ATOMIC_API_KEY = '';
@@ -66,7 +69,10 @@ notifee.requestPermission().then(async settings => {
       const token = await messaging().getToken();
       registerForNotificationsIfReadyAndRequired({ devicePushToken: token });
     } catch (e) {
-      console.warn('Failed to get FCM token — push notifications will not work.', e);
+      console.warn(
+        'Failed to get FCM token — push notifications will not work.',
+        e,
+      );
     }
   }
 });
@@ -141,4 +147,3 @@ const App = () => {
 };
 
 export default App;
-
