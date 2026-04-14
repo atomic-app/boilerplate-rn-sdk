@@ -16,9 +16,8 @@ const ATOMIC_STREAM_CONTAINER_ID = '';
 const ATOMIC_REQUEST_TOKEN_STRING = '';
 
 const onAuthTokenRequested = async () => {
-  // This function will called by the Atomic SDK to authenticate a user.
-  // You would normally get this value from your authentication process.
-  // For this example we will just return a hardcoded string.
+  // Called by the Atomic SDK to authenticate a user.
+  // Returns a hardcoded string placeholder; replace with real auth flow.
   return ATOMIC_REQUEST_TOKEN_STRING;
 };
 
