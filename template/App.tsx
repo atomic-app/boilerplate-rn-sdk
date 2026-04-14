@@ -63,24 +63,31 @@ notifee.requestPermission().then(async settings => {
     try {
       // iOS requires explicit registration for remote messages before getToken().
       // This will fail gracefully if GoogleService-Info.plist is not present.
+      let token: string | null;
       if (Platform.OS === 'ios') {
         await messaging().registerDeviceForRemoteMessages();
+        token = await messaging().getAPNSToken();
+      } else {
+        token = await messaging().getToken();
       }
-      const token = await messaging().getToken();
-      registerForNotificationsIfReadyAndRequired({ devicePushToken: token });
+      if (token) {
+        registerForNotificationsIfReadyAndRequired({ devicePushToken: token });
+      }
     } catch (e) {
       console.warn(
-        'Failed to get FCM token — push notifications will not work.',
+        'Failed to get push token — push notifications will not work.',
         e,
       );
     }
   }
 });
 
-// Called when the FCM token is rotated — re-register the new token with Atomic.
-messaging().onTokenRefresh(token => {
+// Called when the FCM token is rotated.
+messaging().onTokenRefresh(async fcmToken => {
   hasRegisteredForNotifications = false;
-  registerForNotificationsIfReadyAndRequired({ devicePushToken: token });
+  if (Platform.OS === 'android') {
+    registerForNotificationsIfReadyAndRequired({ devicePushToken: fcmToken });
+  }
 });
 
 // Handle FCM messages received while the app is in the foreground.
