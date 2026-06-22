@@ -16,6 +16,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
   ) -> Bool {
+    UNUserNotificationCenter.current().delegate = self
+
     // Required for push notifications via Firebase. GoogleService-Info.plist must
     // be added to the Xcode project before push notifications will work.
     if Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist") != nil {
@@ -33,9 +35,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     window = UIWindow(frame: UIScreen.main.bounds)
 
-    // Required for foreground notification presentation via react-native-notify-kit.
-    UNUserNotificationCenter.current().delegate = self
-
     factory.startReactNative(
       withModuleName: "BoilerplateRNSDK",
       in: window,
@@ -47,7 +46,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
   // Present notifications when the app is in the foreground.
   func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-    completionHandler([.sound, .badge, .banner])
+    completionHandler([.banner, .list, .sound, .badge])
+  }
+
+  // Called when the user taps a notification (delivered while backgrounded or terminated).
+  func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+    completionHandler()
   }
 }
 

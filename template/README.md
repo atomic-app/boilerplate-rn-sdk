@@ -59,20 +59,26 @@ npx react-native run-android
 
 Push notifications require app and organization specific configuration. Full instructions are available in the Atomic documentation.
 
+The template's `App.tsx` automatically handles device and stream container registration with Atomic once permissions are granted and a valid JWT is available.
+
 ### Android
 
 More detailed instructions for setting up [push notifications for Android](https://documentation.atomic.io/sdks/android#push-notifications) can be found in our Atomic documentation, but the minimum steps are:
 
-1. Set up Firebase Cloud Messaging (FCM) for your Android app by following the [Firebase Cloud Messaging guide](https://firebase.google.com/docs/cloud-messaging/android/client). This will include adding a `google-services.json` file to the `android/app/` directory.
-2. Add your FCM Service account private key (JSON) file to the Atomic Workbench under **Configuration > Notifications** to create a Notification Platform.
-3. Register the device's push token with Atomic by calling `AACSDK.registerDeviceForNotifications(token)` when the token is received from Firebase.
-4. Register the stream containers that should receive push notifications by calling `AACSDK.registerStreamContainersForNotifications(streamContainerIds)`.
+1. Create a Firebase project and register your Android app with the package name you intend to use.
+2. Download `google-services.json` from the Firebase console and place it at `android/app/google-services.json`.
+3. Update `applicationId` in `android/app/build.gradle` to match your Firebase project package name.
+4. Add your FCM service account private key (JSON) to the Atomic Workbench under **Configuration > Notifications** to create a Notification Platform.
 
 ### iOS
 
 More detailed instructions for setting up [push notifications for iOS](https://documentation.atomic.io/sdks/ios#push-notifications) can be found in our Atomic documentation, but the minimum steps are:
 
-1. Open the `ios/*.xcworkspace` file in Xcode.
-2. Modify the bundle ID to be unique and set the signing configuration to use your Apple developer account.
-3. Create an Apple Push Notification certificate for the app and export it.
-4. Add the exported certificate to your Atomic Workbench under **Configuration > Notifications**.
+1. Create a Firebase project and register your iOS app with the bundle ID you intend to use.
+2. Download `GoogleService-Info.plist` from the Firebase console. In Xcode, right-click the `BoilerplateRNSDK` group and select **Add Files to "BoilerplateRNSDK"**, then select the plist — ensure it is added to the app target.
+3. Open the `ios/*.xcworkspace` file in Xcode. Under **Signing & Capabilities**, set your **Team** and update the **Bundle Identifier** to match your Firebase project.
+4. Create an APNs authentication key (`.p8`) in the [Apple Developer portal](https://developer.apple.com) under **Certificates, Identifiers & Profiles > Keys**, with the Apple Push Notifications service (APNs) capability enabled.
+5. Upload the APNs key to the Firebase console under **Project Settings > Cloud Messaging > Apple app configuration**.
+6. Upload the APNs key to the Atomic Workbench under **Configuration > Notifications**.
+
+> **Note on `aps-environment`:** The entitlements file is set to `development` by default, which is correct for debug builds run from Xcode. If you are building for release or TestFlight, change the value to `production` in `ios/BoilerplateRNSDK/BoilerplateRNSDK.entitlements`.
