@@ -53,57 +53,66 @@ AtomicSession.initialise(ATOMIC_ENVIRONMENT_ID, ATOMIC_API_KEY);
 AtomicSession.setApiBaseUrl(ATOMIC_API_HOST);
 AtomicSession.setSessionDelegate(onAuthTokenRequested);
 
-// Request notification permission, then fetch the FCM registration token.
-notifee.requestPermission().then(async settings => {
-  const granted =
-    settings.authorizationStatus >= AuthorizationStatus.AUTHORIZED;
-  registerForNotificationsIfReadyAndRequired({ permissionsGranted: granted });
+try {
+  // Request notification permission, then fetch the FCM registration token.
+  notifee.requestPermission().then(async settings => {
+    const granted =
+      settings.authorizationStatus >= AuthorizationStatus.AUTHORIZED;
+    registerForNotificationsIfReadyAndRequired({ permissionsGranted: granted });
 
-  if (granted) {
-    try {
-      // iOS requires explicit registration for remote messages before getToken().
-      // This will fail gracefully if GoogleService-Info.plist is not present.
-      let token: string | null;
-      if (Platform.OS === 'ios') {
-        await messaging().registerDeviceForRemoteMessages();
-        token = await messaging().getAPNSToken();
-      } else {
-        token = await messaging().getToken();
+    if (granted) {
+      try {
+        // iOS requires explicit registration for remote messages before getToken().
+        // This will fail gracefully if GoogleService-Info.plist is not present.
+        let token: string | null;
+        if (Platform.OS === 'ios') {
+          await messaging().registerDeviceForRemoteMessages();
+          token = await messaging().getAPNSToken();
+        } else {
+          token = await messaging().getToken();
+        }
+        if (token) {
+          registerForNotificationsIfReadyAndRequired({
+            devicePushToken: token,
+          });
+        }
+      } catch (e) {
+        console.warn(
+          'Failed to get push token — push notifications will not work.',
+          e,
+        );
       }
-      if (token) {
-        registerForNotificationsIfReadyAndRequired({ devicePushToken: token });
-      }
-    } catch (e) {
-      console.warn(
-        'Failed to get push token — push notifications will not work.',
-        e,
-      );
     }
-  }
-});
-
-// Called when the FCM token is rotated.
-messaging().onTokenRefresh(async fcmToken => {
-  hasRegisteredForNotifications = false;
-  if (Platform.OS === 'android') {
-    registerForNotificationsIfReadyAndRequired({ devicePushToken: fcmToken });
-  }
-});
-
-// Handle FCM messages received while the app is in the foreground.
-messaging().onMessage(async remoteMessage => {
-  AtomicSession.trackPushNotificationReceived(remoteMessage.data ?? {});
-
-  await notifee.displayNotification({
-    title: remoteMessage.notification?.title,
-    body: remoteMessage.notification?.body,
-    data: remoteMessage.data,
-    android: {
-      channelId: 'atomic-notifications',
-      pressAction: { id: 'default' },
-    },
   });
-});
+
+  // Called when the FCM token is rotated.
+  messaging().onTokenRefresh(async fcmToken => {
+    hasRegisteredForNotifications = false;
+    if (Platform.OS === 'android') {
+      registerForNotificationsIfReadyAndRequired({ devicePushToken: fcmToken });
+    }
+  });
+
+  // Handle FCM messages received while the app is in the foreground.
+  messaging().onMessage(async remoteMessage => {
+    AtomicSession.trackPushNotificationReceived(remoteMessage.data ?? {});
+
+    await notifee.displayNotification({
+      title: remoteMessage.notification?.title,
+      body: remoteMessage.notification?.body,
+      data: remoteMessage.data,
+      android: {
+        channelId: 'atomic-notifications',
+        pressAction: { id: 'default' },
+      },
+    });
+  });
+} catch (e) {
+  console.warn(
+    'Push notifications are not available. Ensure Firebase is configured with a valid GoogleService-Info.plist / google-services.json.',
+    e,
+  );
+}
 
 let cachedDevicePushToken: string | null = null;
 let devicePushNotificationPermissionsGranted = false;
